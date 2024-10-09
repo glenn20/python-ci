@@ -1,0 +1,47 @@
+name: Test and Build
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system'
+        default: '["ubuntu-latest", "windows-latest", "macos-latest"]'
+        type: string
+        required: false
+      python-version:
+        description: 'Python version'
+        default: '["3.9", "3.10", "3.11", "3.12", "3.13"]'
+        type: string
+        required: false
+    outputs:
+      package-name:
+        description: 'Name of the package'
+        value: ${{ jobs.build.outputs.package-name }}
+
+jobs:
+  check:
+    name: Code checks
+    uses: ./.github/workflows/_check.yaml
+
+  test:
+    name: Tests
+    uses: ./.github/workflows/_test.yaml
+    with:
+      os: ${{ inputs.os }}
+      python-version: ${{ inputs.python-version }}
+
+  build:  # Only build on main branch
+    name: Build package
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    uses: ./.github/workflows/_build.yaml
+
+  publish-test:
+    name: Publish to test.pypi
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    uses: ./.github/workflows/_publish.yaml
+    needs: build
+    with:
+      package-name: ${{ needs.build.outputs.package-name }}
+      pypi: test.pypi
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
