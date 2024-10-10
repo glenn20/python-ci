@@ -2,10 +2,6 @@ name: Publish python package
 description: Publish python package
 author: glenn20
 inputs:
-  package-name:
-    description: 'Name of the package to publish'
-    required: true
-    type: string
   pypi:
     description: 'Set to "pypi" or "test.pypi" (default).'
     default: 'test.pypi'
@@ -32,4 +28,7 @@ runs:
 
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://${{ inputs.pypi }}.org/legacy/
+        verbose: true
 
