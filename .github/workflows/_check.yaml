@@ -1,0 +1,23 @@
+name: Tests
+
+on:
+  workflow_call:
+
+jobs:
+  checks:
+    name: code checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout and setup python environment
+        uses: ./.github/setup
+
+      - name: mypy
+        run:   uv run --no-sources mypy src
+
+      - name: lint
+        run:   uv run --no-sources ruff check --output-format=github src
+
+      - name: format
+        run:   uv run --no-sources ruff format --check src

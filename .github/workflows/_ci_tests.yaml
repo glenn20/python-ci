@@ -1,0 +1,28 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system'
+        default: '["ubuntu-latest", "windows-latest", "macos-latest"]'
+        type: string
+        required: false
+      python-version:
+        description: 'Python version'
+        default: '["3.9", "3.10", "3.11", "3.12", "3.13"]'
+        type: string
+        required: false
+
+jobs:
+  check:
+    name: Code checks
+    uses: ./.github/workflows/_check.yaml
+
+  test:
+    name: Tests
+    uses: ./.github/workflows/_test.yaml
+    with:
+      os: ${{ inputs.os }}
+      python-version: ${{ inputs.python-version }}
+

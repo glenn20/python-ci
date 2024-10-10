@@ -1,0 +1,32 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'Operating system'
+        type: string
+        required: true
+      python-version:
+        description: 'Python version'
+        type: string
+        required: true
+
+jobs:
+  tests:
+    name: pytest py${{ matrix.python-version }}-${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ${{ fromJson(inputs.os) }}
+        python-version: ${{ fromJson(inputs.python-version) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout and setup python environment
+        uses: ./.github/setup
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: pytest
+        run: uv run --no-sources pytest

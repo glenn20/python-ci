@@ -1,0 +1,34 @@
+name: Publish python package
+
+on:
+  workflow_call:
+    inputs:
+      pypi:
+        description: 'Set to "pypi" or "test.pypi" (default).'
+        default: 'test.pypi'
+        required: false
+        type: string
+
+jobs:
+  build:
+    name: Build package
+    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
+    permissions:
+      id-token: none
+
+  publish:
+    name: Publish to ${{ inputs.pypi }}
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: publish-${{ inputs.pypi }}
+      url: https://${{ inputs.pypi }}.org/p/${{ needs.build.outputs.package-name }}
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+
+    steps:
+      - name: Publish package
+        uses: glenn20/python-ci/publish@main
+        with:
+          pypi: ${{ inputs.pypi }}
