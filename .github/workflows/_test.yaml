@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Checkout and setup python environment
-        uses: ./.github/setup
+        uses: glenn20/python-ci/setup@main
         with:
           python-version: ${{ matrix.python-version }}
 

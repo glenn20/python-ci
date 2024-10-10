@@ -1,0 +1,38 @@
+name: Build python package
+description: Build python package
+author: glenn20
+outputs:
+  package-name:
+    description: 'Name  of the package'
+    value: ${{ steps.package-name.outputs.name }}
+  package-version:
+    description: 'Version number of the package'
+    value: ${{ steps.package-name.outputs.version }}
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all tags to get correct version on build
+
+    - name: Setup python environment
+      uses: glenn20/python-ci/setup@main
+
+    - name: Build package
+      run: uv build --no-sources
+      shell: bash
+
+    - name: Store the distribution packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package
+        path: dist/
+
+    - name: Get package name and version
+      id: package-name
+      run: >-
+        ls dist/*.whl |
+        sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
+        >> $GITHUB_OUTPUT
+      shell: bash
