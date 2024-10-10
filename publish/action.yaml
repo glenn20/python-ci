@@ -12,12 +12,12 @@ inputs:
     default: false
     required: false
     type: boolean
-secrets:
-  pypi_token:
-    description: 'PyPI API token'
-    default: ''
-    required: false
-    type: string
+# secrets:
+#   pypi_token:
+#     description: 'PyPI API token'
+#     default: ''
+#     required: false
+#     type: string
 
 runs:
   using: 'composite'
@@ -32,18 +32,18 @@ runs:
       uses: astral-sh/setup-uv@v3
 
     - name: Publish python package
-      if: inputs.use-uv
+      if: ${{ inputs.use-uv }}
       run: uv publish -vvvv
       env:
         UV_PUBLISH_URL: https://${{ inputs.pypi }}.org/legacy/
-        UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
+        # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
       shell: bash
 
     - name: Publish distribution 📦 to PyPI
-      if: !inputs.use-uv
+      if: ${{ !inputs.use-uv }}
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://${{ inputs.pypi }}.org/legacy/
-        password: ${{ secrets.pypi_token }}
+        # password: ${{ secrets.pypi_token }}
         verbose: true
 
