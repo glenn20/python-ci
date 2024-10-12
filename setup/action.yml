@@ -1,5 +1,8 @@
 name: Setup python environment
-description: Setup python environment
+description: |-
+  A github action to setup the python environment for a project
+  Uses `uv` to install python and setup the project venv
+  Invoke with `uses: glenn20/python-ci/setup@v1`
 author: glenn20
 inputs:
   python-version:

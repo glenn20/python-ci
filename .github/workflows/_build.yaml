@@ -1,4 +1,10 @@
 name: Build python package
+# description: |-
+#   A reusable github workflow to build a python package.
+#   Makes the following outputs available for use by other workflow jobs:
+#   - `package-name`: Name of the package.
+#   - `package-version`: Version number of the package.
+#   Invoke with `uses: glenn20/python-ci/.github/workflow/_build.yaml@v1`
 
 on:
   workflow_call:

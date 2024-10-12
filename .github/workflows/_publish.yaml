@@ -1,4 +1,14 @@
 name: Publish python package
+# description: |-
+#   A github reusable workflow to publish a python package to pypi.org or
+#   test.pypi.org. Input options:
+#   - `pypi: test.pypi`: Publish to test.pypi.org (default).
+#   - `pypi: pypi`: Publish to pypi.org.
+#   The workflow invokes the github action `glenn20/python-ci/publish@v1` to
+#   publish the package.
+#   Assumes two Environments have been defined in the project github
+#   repository: `publish-test.pypi` and `publish-pypi`.
+#   Invoke with `uses: glenn20/python-ci/publish@v1`
 
 on:
   workflow_call:

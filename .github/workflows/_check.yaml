@@ -1,4 +1,10 @@
-name: Tests
+name: Code checks
+# description: |-
+#   A reusable github workflow to run code checks on the codebase, including
+#   - `mypy` for type checks,
+#   - `ruff check` for linting, and
+#   - `ruff format` for code formatting.
+#   Uses `uv run` to run the checks.
 
 on:
   workflow_call:
