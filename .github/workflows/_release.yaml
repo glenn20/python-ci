@@ -1,19 +1,24 @@
 name: Create github release
 # description: |-
-#   A reusable github workflow to sign the python package files and upload to
-#   a GitHub Release. Assumes the python package has been built and uploaded
-#   prior.
+#   A reusable github workflow to sign the python package files and upload to a
+#   GitHub Release. Assumes the python package has been saved as a workflow
+#   artifact. Uses the Sigstore GitHub Action to sign the package before
+#   uploading. The release name can be provided as the `tag` input, else the
+#   current tag name if triggered by a git tag push else the latest version
+#   number from the python package wheel file.
+#   Invoke with `uses: glenn20/python-ci/.github/workflows/_release.yaml@v1`
 
 on:
   workflow_call:
     inputs:
       tag:
         description: >-
-          Version number of the package. Defaults to the current git tag
-          if the workflow is triggered by a tag.
+          Name of the release. Defaults to the current git tag if the
+          workflow is triggered by a tag else the version number from the
+          python package wheel file.
         required: false
         type: string
-        default: ${{ github.ref_name }}
+        default: ''
 
 jobs:
   github-release:
@@ -31,12 +36,18 @@ jobs:
           name: python-package
           path: dist/
 
-      - name: Get package name and version
-        id: package-name
-        run: >-
-          ls dist/*.whl |
-          sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
-          >> $GITHUB_OUTPUT
+      - name: Check the release version tag
+        id: tag
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            tag="${{ inputs.tag }}"
+          elif [[ "${{ github.ref }}" == /refs/tags/* ]]; then
+            tag="${{ github.ref_name }}"
+          else
+            tag="$(ls ./dist/*.whl | tail -1 | sed 's/^[^-]*-\([^-]*\)-py.*$/v\1/')"
+          fi
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+        shell: bash
 
       - name: Sign the dists with Sigstore
         uses: sigstore/gh-action-sigstore-python@v2.1.1
@@ -50,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           gh release create
-          'v${{ steps.package-name.outputs.version }}'
+          '${{ steps.tag.outputs.tag }}'
           --repo '${{ github.repository }}'
           --notes ""
 
@@ -62,6 +73,6 @@ jobs:
         # sigstore-produced signatures and certificates.
         run: >-
           gh release upload
-          'v${{ steps.package-name.outputs.version }}'
+          '${{ steps.tag.outputs.tag }}'
           dist/**
           --repo '${{ github.repository }}'
