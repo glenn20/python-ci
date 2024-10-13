@@ -22,7 +22,7 @@ on:
 
 jobs:
   github-release:
-    name: Sign the distribution and upload to GitHub Release
+    name: GitHub Release
     runs-on: ubuntu-latest
 
     permissions:
