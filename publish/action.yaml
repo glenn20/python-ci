@@ -13,11 +13,6 @@ inputs:
     default: 'test.pypi'
     required: false
     type: string
-  use-uv:
-    description: 'Use `uv` or `pypa` to publish the package.'
-    default: false
-    required: false
-    type: boolean
 # secrets:
 #   pypi_token:
 #     description: 'PyPI API token'
@@ -37,16 +32,14 @@ runs:
     - name: Install uv
       uses: astral-sh/setup-uv@v3
 
-    - name: Publish python package
-      if: ${{ inputs.use-uv }}
-      run: uv publish -vvvv
-      env:
-        UV_PUBLISH_URL: https://${{ inputs.pypi }}.org/legacy/
-        # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
-      shell: bash
+    # - name: Publish python package
+    #   run: uv publish -vvvv
+    #   env:
+    #     UV_PUBLISH_URL: https://${{ inputs.pypi }}.org/legacy/
+    #     # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
+    #   shell: bash
 
     - name: Publish distribution 📦 to PyPI
-      if: ${{ !inputs.use-uv }}
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://${{ inputs.pypi }}.org/legacy/
