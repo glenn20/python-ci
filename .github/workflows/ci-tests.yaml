@@ -25,11 +25,11 @@ on:
 jobs:
   check:
     name: Code checks
-    uses: ./.github/workflows/_check.yaml
+    uses: ./.github/workflows/check.yaml
 
   test:
     name: Tests
-    uses: ./.github/workflows/_test.yaml
+    uses: ./.github/workflows/test.yaml
     with:
       os: ${{ inputs.os }}
       python-version: ${{ inputs.python-version }}
