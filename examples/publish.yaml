@@ -1,18 +1,23 @@
 name: Publish python package
 
-# For trusted publishing, the publishing workflow must be in the project
-# repository, so copy this workflow file to `.github/workflows/publish.yaml` in
-# your repository.
-
-# description: |-
-#   A github reusable workflow to publish a python package to pypi.org or
-#   test.pypi.org. Input options:
+# description: |- A github reusable workflow to publish a python package to
+#   pypi.org or test.pypi.org. Input options:
 #   - `pypi: test.pypi`: Publish to test.pypi.org (default).
-#   - `pypi: pypi`: Publish to pypi.org.
-#   The workflow invokes the github action `glenn20/python-ci/publish@v1` to
-#   publish the package.
-#   Assumes two Environments have been defined in the project github
-#   repository: `publish-test.pypi` and `publish-pypi`.
+#   - `pypi: pypi`: Publish to pypi.org. The workflow invokes the github action
+#     `glenn20/python-ci/publish@v1` to publish the package.
+#
+#   Requirements:
+#   1. For trusted publishing, the publishing workflow must be in the project
+#      repository, so copy this workflow file to
+#      `.github/workflows/publish.yaml` in your repository.
+#   2. Create the `publish-test.pypi` and `publish-pypi` Environments in your
+#      github repository (Settings->Environments->New Environment).
+#   3. Add this workflow as a "trusted publisher" on your pypi and test.pypi
+#      project pages (add the name of the relevant Environment for additional
+#      access control).
+#   4. Call this workflow from a parent workflow with the `pypi` input set to
+#      "pypi" or "test.pypi" (default).
+#
 #   Invoke with `uses: glenn20/python-ci/publish@v1`
 
 on:
