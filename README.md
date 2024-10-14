@@ -1,13 +1,13 @@
 # Github CI Workflows for Python Packages
 
-A collection of github [reusable workflows and composite actions](
+My collection of github [reusable workflows and composite actions](
   https://docs.github.com/en/actions/sharing-automations/avoiding-duplication#about-reusable-workflows-and-composite-actions)
 for checking, testing, publishing and releasing
-python packages.
+python packages. I have put these in this repo so I can re-use them in my python projects.
 
-These workflows use the [`uv`](https://docs.astral.sh/uv/) python package
-manager for managing the project virtual env and building and publishing python
-packages.
+These workflows use the [`uv`](https://docs.astral.sh/uv/) python package tool
+for managing the project virtual environments, running tests and building and
+publishing python packages.
 
 ## Usage Examples
 
