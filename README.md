@@ -55,11 +55,11 @@ more quickly with `uv`.
 
 - [`examples/pyproject.yaml`](./examples/pyproject.toml):
 
-  A sample `pyproject.toml` file to use with the github workflow files.
+  An example `pyproject.toml` file to use with the github workflow files.
   Includes:
-  - Uses `hatch-vcs` to dynamically update the project version
+  - Uses `hatch-vcs` to dynamically update the project version based on git tags
   - Compatible `tox` configuration to run tests using: `uv run tox`
-  - Default configs for `mypy`, `ruff` and `pytest`.
+  - Default configs for `uv`, `mypy`, `ruff` and `pytest`.
   - Assumes the project python code is in the `src` sub-directory
   - Assumes tests are in the `tests` sub-directory
 
@@ -67,9 +67,10 @@ more quickly with `uv`.
 
 - [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
 
-  Run CI test workflows on the codebase. Uses `pytest` to run the tests and `uv`
-  to manage the python versions and virtual env. Assumes `pytest` configuration
-  is completely provided in configuration files (eg. `pyproject.toml`).
+  Run code checks and CI test workflows on the codebase. Uses `pytest`, `mypy`
+  and `ruff` to run the code checks and tests; and `uv` to manage the python
+  versions and virtual env. Assumes `pytest` configuration is completely
+  provided in configuration files (eg. `pyproject.toml`).
 
   Input options: (passed to `test.yaml` - see below)
   - `os`: a json string containing the list of operating systems on which to
@@ -80,14 +81,6 @@ more quickly with `uv`.
     - Default is `["3.9", "3.10", "3.11", "3.12", "3.13"]`.
 
   Invoke with: `uses: glenn20/python-ci/.github/workflows/test.yaml@v1`
-
-- [`.github/workflows/check.yaml`](.github/workflows/check.yaml):
-
-  Run code checks on the codebase. Uses `mypy` for type checking and `ruff` for
-  linting and format checking. Assumes `mypy` and `ruff` configuration is
-  completely provided in configuration files (eg. `pyproject.toml`).
-
-  Invoke with: `uses: glenn20/python-ci/.github/workflows/check.yaml@v1`
 
 - [`.github/workflows/build.yaml`](.github/workflows/build.yaml):
 
@@ -115,6 +108,17 @@ more quickly with `uv`.
     package wheel file.
 
   Invoke with `uses: glenn20/python-ci/.github/workflow/release.yaml@v1`
+
+- [`.github/workflows/check.yaml`](.github/workflows/check.yaml):
+
+  Run code checks on the codebase. Uses `mypy` for type checking and `ruff` for
+  linting and format checking. Assumes `mypy` and `ruff` configuration is
+  completely provided in configuration files (eg. `pyproject.toml`).
+
+  **This workflow is called by `test.yaml`.**
+
+  Invoke with: `uses: glenn20/python-ci/.github/workflows/check.yaml@v1`
+
 
 ## Github Actions provided
 

@@ -13,10 +13,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  check:
-    name: Code checks
-    uses: glenn20/python-ci/.github/workflows/check.yaml@main
-
   tests:
     name: CI tests
     uses: glenn20/python-ci/.github/workflows/test.yaml@main
