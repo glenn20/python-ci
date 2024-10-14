@@ -63,6 +63,7 @@ jobs:
           gh release create
           '${{ steps.tag.outputs.tag }}'
           --repo '${{ github.repository }}'
+          --notes-from-tag
           --notes ""
 
       - name: Upload artifact signatures to GitHub Release
