@@ -54,18 +54,6 @@ publishing python packages.
 
 ## Reusable Github Workflows provided
 
-- [`.github/workflows/ci-tests.yaml`](.github/workflows/ci-tests.yaml):
-
-  Run code checks and CI test workflows on the codebase. Invokes the existing
-  workflows `check.yaml` and `test.yaml` (see below) to perform the checks and
-  tests.
-
-  Input options: (passed to `test.yaml` - see below)
-  - `os`: a json string of the operating systems test.
-  - `python-version`: a json string of python versions to run tests.
-
-  Invoke with: `uses: glenn20/python-ci/.github/workflows/ci-tests.yaml@v1`
-
 - [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
 
   Run CI test workflows on the codebase. Uses `pytest` to run the tests and `uv`
@@ -78,7 +66,7 @@ publishing python packages.
     - Default is `["ubuntu-latest", "windows-latest", "macos-latest"]`.
   - `python-version`: a json string containing the list of python versions on
     which to run tests.
-    - Default is `["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]`.
+    - Default is `["3.9", "3.10", "3.11", "3.12", "3.13"]`.
 
   Invoke with: `uses: glenn20/python-ci/.github/workflows/test.yaml@v1`
 
@@ -139,5 +127,9 @@ publishing python packages.
   Install `uv` and python and setup the python virtual environment (venv).
 
   This action is used internally by the reusable workflows above.
+
+  Input options:
+  - `python-version:` set the python version to install (default
+    "3.12").
 
   Invoke with: `uses: glenn20/python-ci/setup@v1`
