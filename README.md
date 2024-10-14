@@ -52,6 +52,15 @@ publishing python packages.
   4. Call this workflow from a parent workflow with the `pypi` input set to
      "pypi" or "test.pypi" (default).
 
+- [`examples/pyproject.yaml`](./examples/pyproject.toml):
+
+  A sample `pyproject.toml` file to use with the github workflow files.
+  Includes:
+  - Uses `hatch-vcs` to dynamically update the project version
+  - Compatible `tox` configuration to run tests using: `uv run tox`
+  - Default configs for `mypy`, `ruff` and `pytest`.
+  - Assumes the project python code is in the `src` sub-directory
+
 ## Reusable Github Workflows provided
 
 - [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
