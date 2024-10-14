@@ -20,10 +20,10 @@ jobs:
         uses: glenn20/python-ci/setup@main
 
       - name: mypy
-        run:   uv run --no-sources mypy src
+        run:   uv run --no-sources mypy
 
       - name: lint
-        run:   uv run --no-sources ruff check --output-format=github src
+        run:   uv run --no-sources ruff check
 
       - name: format
-        run:   uv run --no-sources ruff format --check src
+        run:   uv run --no-sources ruff format --check
