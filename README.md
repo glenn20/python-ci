@@ -7,7 +7,8 @@ python packages. I have put these in this repo so I can re-use them in my python
 
 These workflows use the [`uv`](https://docs.astral.sh/uv/) python package tool
 for managing the project virtual environments, running tests and building and
-publishing python packages.
+publishing python packages. All tests and publishing workflows run substantially
+more quickly with `uv`.
 
 ## Usage Examples
 
@@ -60,6 +61,7 @@ publishing python packages.
   - Compatible `tox` configuration to run tests using: `uv run tox`
   - Default configs for `mypy`, `ruff` and `pytest`.
   - Assumes the project python code is in the `src` sub-directory
+  - Assumes tests are in the `tests` sub-directory
 
 ## Reusable Github Workflows provided
 

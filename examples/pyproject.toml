@@ -58,7 +58,7 @@ env.clean.commands = [["coverage", "erase"]]  # Reset the coverage data at start
 env.clean.deps = ["coverage>=7.0"]
 env.clean.skip_install = true
 env.mypy.commands = [["mypy"]]
-env.mypy.deps = ["mypy>=0.910"]
+env.mypy.deps = ["mypy>=0.910", "pytest"]
 env.lint.commands = [["ruff", "check"]]
 env.lint.deps = ["ruff>=0.6.0"]
 env.format.commands = [["ruff", "format", "--check"]]
@@ -68,7 +68,7 @@ env_run_base.deps = ["pytest>=8.3.2", "pytest-cov>=3.0.0"]
 env_run_base.package = "editable"
 
 [tool.mypy]
-files = ["src"]
+files = ["src", "tests"]
 python_version = "3.9"
 disallow_untyped_defs = true
 warn_return_any = true
