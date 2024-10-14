@@ -35,7 +35,7 @@ on:
 
 jobs:
   build:
-    name: Build package
+    name: Build
     uses: glenn20/python-ci/.github/workflows/build.yaml@main
     permissions:
       id-token: none
