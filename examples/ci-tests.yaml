@@ -1,9 +1,11 @@
 name: Test and Build
 
-# Run the code checks and CI pytest workflow on push to main or dev branches, or
-# manually triggered from github Actions tab.
+# Run the code checks and CI pytest workflow on
+# - push to `main` or `dev` branches, or
+# - manually triggered from github Actions tab.
 
-# Build and publish to test.pypi on push to main.
+# Build and publish to test.pypi on
+# - push to `main` branch.
 
 on:
   push:
@@ -11,18 +13,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci-tests:
+  check:
+    name: Code checks
+    uses: glenn20/python-ci/.github/workflows/check.yaml@main
+
+  tests:
     name: CI tests
-    uses: glenn20/python-ci/.github/workflows/ci-tests.yaml@main
-    with:
+    uses: glenn20/python-ci/.github/workflows/test.yaml@main
+    with:  # A short test matrix for fast testing of commits
       os: '["ubuntu-latest"]'
-      python-version: '["3.9", "3.11"]'
-    permissions:
-      id-token: none
+      python-version: '["3.9", "3.13"]'
 
   publish-test:
     name: Publish to test.pypi
-    needs: ci-tests
+    needs: [check, tests]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/publish.yaml
     with:

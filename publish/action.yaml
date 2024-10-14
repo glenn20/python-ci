@@ -2,8 +2,6 @@ name: Publish python package
 description: |-
   A github action to publish a python package to pypi.org or test.pypi.org.
   Input options:
-  - `use-uv: true`: Use `uv publish` to publish the package.
-  - `use-uv: false`: Use `pypa/gh-action-pypi-publish` to publish the package.
   - `pypi: test.pypi` or `pypi: pypi`: Publish to test.pypi or pypi.org.
   Invoke with `uses: glenn20/python-ci/publish@v1`
 author: glenn20
@@ -39,7 +37,7 @@ runs:
         # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
       shell: bash
 
-    # - name: Publish distribution 📦 to PyPI
+    # - name: Publish python package
     #   uses: pypa/gh-action-pypi-publish@release/v1
     #   with:
     #     repository-url: https://${{ inputs.pypi }}.org/legacy/
