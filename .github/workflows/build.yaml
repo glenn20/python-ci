@@ -8,23 +8,11 @@ name: Build python package
 
 on:
   workflow_call:
-    outputs:
-      package-name:
-        description: 'Name of the package'
-        value: ${{ jobs.build.outputs.package-name }}
-      package-version:
-        description: 'Version number of the package'
-        value: ${{ jobs.build.outputs.package-version }}
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
-    outputs:
-      package-name: ${{ steps.package-name.outputs.name }}
-      package-version: ${{ steps.package-name.outputs.version }}
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,10 +29,3 @@ jobs:
         with:
           name: python-package
           path: dist/
-
-      - name: Get package name and version
-        id: package-name
-        run: >-
-          ls dist/*.whl |
-          sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
-          >> $GITHUB_OUTPUT
