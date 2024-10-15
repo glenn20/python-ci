@@ -83,7 +83,6 @@ the project repo and adjust according to the project needs.
   `.git/hooks/post-checkout` files:
   - `uv run --frozen hatch build --hooks-only > /dev/null`
 
-
 ## Reusable Github Workflows provided
 
 - [`.github/workflows/check.yaml`](.github/workflows/check.yaml):
