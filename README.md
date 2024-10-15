@@ -91,8 +91,6 @@ the project repo and adjust according to the project needs.
   linting and format checking. Assumes `mypy` and `ruff` configuration is
   completely provided in configuration files (eg. `pyproject.toml`).
 
-  **This workflow is called by `test.yaml`.**
-
   Invoke with: `uses: glenn20/python-ci/.github/workflows/check.yaml@v1`
 
 - [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
