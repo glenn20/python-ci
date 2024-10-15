@@ -39,13 +39,6 @@ on:
         default: '["3.9", "3.10", "3.11", "3.12", "3.13"]'
         type: string
         required: false
-    outputs:
-      package-name:
-        description: 'Name of the package'
-        value: ${{ jobs.build.outputs.package-name }}
-      package-version:
-        description: 'Version number of the package'
-        value: ${{ jobs.build.outputs.package-version }}
 
 jobs:
   checks:
@@ -62,4 +55,3 @@ jobs:
   build:
     name: Build
     uses: glenn20/python-ci/.github/workflows/build.yaml@main
-
