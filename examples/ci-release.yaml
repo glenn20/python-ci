@@ -46,7 +46,7 @@ jobs:
 
   github-release:
     name: Create GitHub release
-    uses: glenn20/python-ci/.github/workflows/release.yaml@main
+    uses: glenn20/python-ci/.github/workflows/release.yaml@v1
     needs: tests
     permissions:
       contents: write  # IMPORTANT: mandatory for github release

@@ -15,7 +15,7 @@ on:
 jobs:
   tests:
     name: CI tests
-    uses: glenn20/python-ci/.github/workflows/check-test-build.yaml@main
+    uses: glenn20/python-ci/.github/workflows/check-test-build.yaml@v1
     with:  # A short test matrix for fast testing of commits
       os: '["ubuntu-latest"]'
       python-version: '["3.9", "3.13"]'

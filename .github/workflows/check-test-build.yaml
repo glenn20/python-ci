@@ -43,15 +43,15 @@ on:
 jobs:
   checks:
     name: Code checks
-    uses: glenn20/python-ci/.github/workflows/check.yaml@main
+    uses: glenn20/python-ci/.github/workflows/check.yaml@v1
 
   tests:
     name: Tests
-    uses: glenn20/python-ci/.github/workflows/test.yaml@main
+    uses: glenn20/python-ci/.github/workflows/test.yaml@v1
     with:
       os: ${{ inputs.os }}
       python-version: ${{ inputs.python-version }}
 
   build:
     name: Build
-    uses: glenn20/python-ci/.github/workflows/build.yaml@main
+    uses: glenn20/python-ci/.github/workflows/build.yaml@v1
