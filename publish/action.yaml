@@ -44,6 +44,7 @@ runs:
         | sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
         | sed '/^name=/s/_/-/g'
         >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Publish python package
       run: uv publish -vvvv
