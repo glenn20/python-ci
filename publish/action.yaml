@@ -17,6 +17,13 @@ inputs:
 #     default: ''
 #     required: false
 #     type: string
+outputs:
+  package-name:
+    description: 'Name of the package'
+    value: ${{ steps.package-name.outputs.name }}
+  package-version:
+    description: 'Version number of the package'
+    value: ${{ steps.package-name.outputs.version }}
 
 runs:
   using: 'composite'
@@ -29,6 +36,14 @@ runs:
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3
+
+    - name: Get package name and version
+      id: package-name
+      run: >-
+        ls dist/*.whl
+        | sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
+        | sed '/^name=/s/_/-/g'
+        >> $GITHUB_OUTPUT
 
     - name: Publish python package
       run: uv publish -vvvv
