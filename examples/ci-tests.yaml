@@ -23,7 +23,9 @@ jobs:
   publish-test:
     name: Publish to test.pypi
     needs: tests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
     uses: ./.github/workflows/publish.yaml
     with:
       pypi: test.pypi
