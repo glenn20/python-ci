@@ -1,5 +1,18 @@
 name: Publish and Release
 
+#   A github reusable workflow to:
+#   - Run code checks and tests on multiple python versions and platforms;
+#   - Publish a python package to test.pypi.org and pypi.org; and
+#   - Create a GitHub Release.
+#
+#   The workflow is triggered on:
+#   - push to version tags matching "v*", eg. "v1.0.0", or
+#   - manual workflow_dispatch (eg. from the github `Actions` tab):
+#     - will produce a release with a version tag like: "v1.0.1.devN"
+#
+#   Uses reusable workflows from the <https://github.com/glenn20/python-ci>
+#   repository.
+
 on:
   push:
     tags: ["v*"]  # Publish on tags matching "v*", eg. "v1.0.0"
