@@ -8,7 +8,7 @@ on:
 jobs:
   tests:
     name: Tests
-    uses: glenn20/python-ci/.github/workflows/test.yaml@main
+    uses: glenn20/python-ci/.github/workflows/check-test-build.yaml@main
     with:
       os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
       python-version: '["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]'
@@ -23,10 +23,9 @@ jobs:
 
   publish-pypi:
     name: Publish to pypi
-    if: false  # Disabled for now
     uses: ./.github/workflows/publish.yaml
     with:
-      pypi: pypi
+      pypi: upload.pypi
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!
 

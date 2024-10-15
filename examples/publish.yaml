@@ -28,28 +28,22 @@ on:
   workflow_call:
     inputs:
       pypi:
-        description: 'Set to "pypi" or "test.pypi" (default).'
+        description: 'Set to "upload.pypi" or "test.pypi" (default).'
         default: 'test.pypi'
         required: false
         type: string
 
 jobs:
-  build:
-    name: Build
-    uses: glenn20/python-ci/.github/workflows/build.yaml@main
-    permissions:
-      id-token: none
-
   publish:
     name: Publish to ${{ inputs.pypi }}
-    needs: build
     runs-on: ubuntu-latest
     environment:
       name: publish-${{ inputs.pypi }}
-      url: https://${{ inputs.pypi }}.org/p/${{ needs.build.outputs.package-name }}
+      url: https://${{ inputs.pypi }}.org/p/${{ steps.publish.outputs.package-name }}
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
       - uses: glenn20/python-ci/publish@main
+        id: publish
         with:
           pypi: ${{ inputs.pypi }}

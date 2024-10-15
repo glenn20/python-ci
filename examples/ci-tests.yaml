@@ -27,6 +27,5 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       pypi: test.pypi
-      package-name: ${{ needs.tests.outputs.package-name }}
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!
