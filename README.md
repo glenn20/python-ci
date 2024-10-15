@@ -103,21 +103,17 @@ the project repo and adjust according to the project needs.
   Input options:
   - `os`: a json string containing the list of operating systems on which to
     run tests.
-    - Default is `["ubuntu-latest", "windows-latest", "macos-latest"]`.
+    - Default is `'["ubuntu-latest", "windows-latest", "macos-latest"]'`.
   - `python-version`: a json string containing the list of python versions on
     which to run tests.
-    - Default is `["3.9", "3.10", "3.11", "3.12", "3.13"]`.
+    - Default is `'["3.9", "3.10", "3.11", "3.12", "3.13"]'`.
 
   Invoke with: `uses: glenn20/python-ci/.github/workflows/test.yaml@v1`
 
 - [`.github/workflows/build.yaml`](.github/workflows/build.yaml):
 
-  Build the python package and upload as a workflow artifact to the github repo.
-  Makes the following outputs available for use by other workflow jobs (eg. used
-  in the [`examples/publish.yaml`](./examples/publish.yaml) workflow):
-
-  - `package-name`: Name of the package.
-  - `package-version`: Version number of the package.
+  Build the python package (using `uv build`) and upload as a workflow artifact
+  to the github repo.
 
   Invoke with `uses: glenn20/python-ci/.github/workflow/build.yaml@v1`
 
@@ -128,10 +124,10 @@ the project repo and adjust according to the project needs.
   Input options: (passed to `test.yaml` workflow above)
   - `os`: a json string containing the list of operating systems on which to
     run tests.
-    - Default is `["ubuntu-latest", "windows-latest", "macos-latest"]`.
+    - Default is `'["ubuntu-latest", "windows-latest", "macos-latest"]'`.
   - `python-version`: a json string containing the list of python versions on
     which to run tests.
-    - Default is `["3.9", "3.10", "3.11", "3.12", "3.13"]`.
+    - Default is `'["3.9", "3.10", "3.11", "3.12", "3.13"]'`.
 
   Invoke with: `uses: glenn20/python-ci/.github/workflows/check-build-test.yaml@v1`
 
