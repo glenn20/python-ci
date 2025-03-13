@@ -6,7 +6,7 @@ name: Create github release
 #   uploading. The release name can be provided as the `tag` input, else the
 #   current tag name if triggered by a git tag push else the latest version
 #   number from the python package wheel file.
-#   Invoke with `uses: glenn20/python-ci/.github/workflows/_release.yaml@v1`
+#   Invoke with `uses: glenn20/python-ci/.github/workflows/_release.yaml@v2`
 
 on:
   workflow_call:
@@ -36,6 +36,13 @@ jobs:
           name: python-package
           path: dist/
 
+      - name: Sign the dists with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+
       - name: Check the release version tag
         id: tag
         run: |
@@ -48,13 +55,6 @@ jobs:
           fi
           echo "tag=$tag" >> $GITHUB_OUTPUT
         shell: bash
-
-      - name: Sign the dists with Sigstore
-        uses: sigstore/gh-action-sigstore-python@v2.1.1
-        with:
-          inputs: >-
-            ./dist/*.tar.gz
-            ./dist/*.whl
 
       - name: Create GitHub Release
         env:
