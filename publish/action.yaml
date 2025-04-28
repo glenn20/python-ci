@@ -28,6 +28,8 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - uses: actions/checkout@v4
+
     - name: Download all the dists
       uses: actions/download-artifact@v4
       with:
