@@ -35,7 +35,7 @@ runs:
         path: dist/
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v3
+      uses: astral-sh/setup-uv@v6
 
     - name: Get package name and version
       id: package-name

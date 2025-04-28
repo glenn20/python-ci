@@ -15,9 +15,7 @@ runs:
   using: 'composite'
   steps:
     - name: Install uv
-      uses: astral-sh/setup-uv@v3
-      with:
-        enable-cache: true
+      uses: astral-sh/setup-uv@v6
 
     - name: Install python
       run: uv python install ${{ inputs.python-version }}
