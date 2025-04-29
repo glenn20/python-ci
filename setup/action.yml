@@ -17,11 +17,11 @@ runs:
     - name: Install uv
       uses: astral-sh/setup-uv@v6
 
-    - name: Install python
+    - name: Install python-${{ inputs.python-version }}
       run: uv python install ${{ inputs.python-version }}
       shell: bash
 
-    - name: Install python and setup project venv
+    - name: Setup project venv
       # Will install python version specified in pyproject.toml
       # Use --frozen so we don't update the uv.lock file
       # Use --no-sources to ignore source packages used in local development
