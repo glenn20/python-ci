@@ -23,8 +23,7 @@ runs:
 
     - name: Setup project venv
       # Will install python version specified in pyproject.toml
-      # Use --frozen so we don't update the uv.lock file
       # Use --no-sources to ignore source packages used in local development
       # Use --all-extras --dev to ensure we have everything needed for dev
-      run: uv sync --frozen --no-sources --all-extras --dev
+      run: uv sync --no-sources --all-extras --dev
       shell: bash
