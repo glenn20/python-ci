@@ -20,10 +20,10 @@ jobs:
         uses: glenn20/python-ci/setup@v1
 
       - name: mypy
-        run: uv run --no-sources --all-extras mypy
+        run: uv run --frozen mypy
 
       - name: lint
-        run: uv run --no-sources --all-extras ruff check
+        run: uv run --frozen ruff check
 
       - name: format
-        run: uv run --no-sources --all-extras ruff format --check
+        run: uv run --frozen ruff format --check

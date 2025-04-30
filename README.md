@@ -81,7 +81,7 @@ the project repo and adjust according to the project needs.
   To ensure that the `_version.py` file is updated with a new version after
   every commit or checkout, add this command to the `.git/hooks/post-commit` and
   `.git/hooks/post-checkout` files:
-  - `uv run --frozen hatch build --hooks-only > /dev/null`
+  - `uv run hatch build --hooks-only > /dev/null`
 
 ## Reusable Github Workflows provided
 

@@ -51,4 +51,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: pytest
-        run: uv run --no-sources --all-extras pytest
+        run: uv run --frozen pytest
