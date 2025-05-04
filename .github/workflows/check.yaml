@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Checkout and setup python environment
-        uses: glenn20/python-ci/setup@v1
+        uses: glenn20/python-ci/setup@dev
 
       - name: mypy
         run: uv run --frozen mypy
