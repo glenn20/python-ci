@@ -19,6 +19,9 @@ outputs:
   package-version:
     description: 'Version number of the package'
     value: ${{ steps.package-name.outputs.version }}
+  url:
+    description: 'URL of the package on pypi.org (or test.pypi.org)'
+    value: https://${{ inputs.test-only == 'true' && 'test.' || '' }}pypi.org/p/${{ steps.package-name.outputs.name }}
 
 runs:
   using: 'composite'

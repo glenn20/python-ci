@@ -4,12 +4,12 @@ description: |-
   Uses `uv` to install python and setup the project venv
   Invoke with `uses: glenn20/python-ci/setup@v1`
 author: glenn20
+
 inputs:
   python-version:
     description: "Python version to install"
     required: false
     default: "3.12"
-    type: string
 
 runs:
   using: 'composite'
