@@ -62,5 +62,5 @@ runs:
       shell: bash
       run: uv publish
       env:
-        UV_PUBLISH_URL: https://pypi.org/legacy/
+        UV_PUBLISH_URL: https://upload.pypi.org/legacy/
         # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
