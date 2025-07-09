@@ -62,63 +62,22 @@ on:
         type: string
         required: false
 
+# Trusted publishing to pypi.org can not be done from a reusable workflow
+# so publish workflows must be run from the main workflow file.
 jobs:
-  code-check:
-    if: ${{ contains(fromJson(inputs.jobs), 'code-check') }}
+  check:
+    if: ${{ contains(fromJson(inputs.jobs), 'check') }}
     name: Run static code checks
-    uses: glenn20/python-ci/.github/workflows/check.yaml@dev
+    uses: ./.github/workflows/code-check.yaml
 
-  test-pytest:
-    if: ${{ contains(fromJson(inputs.jobs), 'test-pytest') }}
+  test:
+    if: ${{ contains(fromJson(inputs.jobs), 'test') }}
     name: Run tests using pytest
-    uses: glenn20/python-ci/.github/workflows/test-pytest.yaml@dev
+    uses: ./.github/workflows/test-pytest.yaml
     with:
       os: ${{ inputs.os }}
       python-version: ${{ inputs.python-version }}
 
-  test-tox:
-    if: ${{ contains(fromJson(inputs.jobs), 'test-tox') || contains(fromJson(inputs.jobs), 'test') }}
-    name: Run tests and code checks using tox
-    uses: glenn20/python-ci/.github/workflows/test-tox.yaml@dev
-    with:
-      os: ${{ inputs.os }}
-      python-version: ${{ inputs.python-version }}
-
-  build:
-    if: ${{ contains(fromJson(inputs.jobs), 'build') }}
+  build:  # Always build the package in this workflow
     name: Build python package
-    uses: glenn20/python-ci/.github/workflows/build.yaml@dev
-
-  # The publish workflows must be located in your project repository, not in the
-  # python-ci repository, so that they can access the secrets needed to publish
-  # to test.pypi.org and pypi.org. Copy the `publish.yaml` workflow from
-  # `glenn20/python-ci/examples/publish.yaml` to your project's
-  # `.github/workflows` directory.
-  publish-test:
-    if: ${{ contains(fromJson(inputs.jobs), 'publish-test') }}
-    name: Publish to test.pypi
-    uses: .github/workflows/publish.yaml@dev
-    with:
-      pypi: 'test.pypi'
-    needs: build
-    permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing!
-
-  publish:
-    if: ${{ contains(fromJson(inputs.jobs), 'publish') }}
-    name: Publish to pypi
-    uses: .github/workflows/publish.yaml@dev
-    with:
-      pypi: 'upload.pypi'
-    needs: publish-test
-    permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing!
-
-  release:
-    if: ${{ contains(fromJson(inputs.jobs), 'release') }}
-    name: Create GitHub release
-    uses: glenn20/python-ci/.github/workflows/github-release.yaml@dev
-    needs: publish
-    permissions:
-      contents: write  # IMPORTANT: mandatory for github release
-      id-token: write  # IMPORTANT: mandatory for github release
+    uses: ./.github/workflows/build.yaml

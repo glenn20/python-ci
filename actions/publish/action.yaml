@@ -21,7 +21,7 @@ outputs:
     value: ${{ steps.package-name.outputs.version }}
   url:
     description: 'URL of the package on pypi.org (or test.pypi.org)'
-    value: https://${{ inputs.test-only == 'true' && 'test.' || '' }}pypi.org/p/${{ steps.package-name.outputs.name }}
+    value: https://${{ (inputs.test-only == 'true') && 'test.' || '' }}pypi.org/p/${{ steps.package-name.outputs.name }}
 
 runs:
   using: 'composite'
@@ -39,24 +39,24 @@ runs:
 
     - name: Get package name and version
       id: package-name
+      shell: bash
       run: >-
         ls dist/*.whl
         | sed 's/^.*\/\([^-]*\)-\([^-]*\)-.*$/name=\1\nversion=\2/;1q'
         | sed '/^name=/s/_/-/g'
         >> $GITHUB_OUTPUT
-      shell: bash
 
-    - name: Publish python package to test.pypi
+    - name: Publish to test.pypi
+      shell: bash
       run: uv publish
       env:
         UV_PUBLISH_URL: https://test.pypi.org/legacy/
         # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
-      shell: bash
 
-    - name: Publish python package to pypi.org
+    - name: Publish to pypi.org
       if: ${{ inputs.test-only != 'true' }}
+      shell: bash
       run: uv publish
       env:
         UV_PUBLISH_URL: https://pypi.org/legacy/
         # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
-      shell: bash

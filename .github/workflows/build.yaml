@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0  # Fetch all tags to get correct version on build
 
       - name: Setup python environment
-        uses: glenn20/python-ci/setup@dev
+        uses: glenn20/python-ci/actions/setup@dev
 
       - name: Build package
         run: uv build
