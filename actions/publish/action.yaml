@@ -1,10 +1,14 @@
 name: Publish python package
+author: glenn20
 description: |-
   A github action to publish a python package to test.pypi.org and pypi.org.
-  Input options:
-  - `test-only`: Publish only to test.pypi.org if set to `true` (default).
   Invoke with `uses: glenn20/python-ci/publish@v2`
-author: glenn20
+  Inputs:
+  - `test-only`: Publish only to test.pypi.org if set to `true` (default).
+  Outputs:
+  - `package-name`: Name of the package.
+  - `package-version`: Version number of the package.
+  - `url`: URL of the package on pypi.org (or test.pypi.org).
 
 inputs:
   test-only:

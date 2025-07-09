@@ -1,12 +1,41 @@
 name: Setup CI workflow configuraqtion
 description: |-
   A github action to process the configuration for the CI workflow.
+  Inputs:
+  - `config`: A json string containing the configuration for the CI workflow.
   Outputs:
   - `jobs`: The list of CI jobs to run (test, build, publish, release).
   - `os`: The list of operating systems on which to run the tests.
   - `python-version`: The list of python versions on which to run the tests.
   Invoke with `uses: glenn20/python-ci/config@v2`
 author: glenn20
+
+# `config` is a dictionary where the keys are `matchers` for the event that
+# triggered this workflow, and the values are the configuration for the CI
+# workflow.
+#
+# `Matchers` should be written to match the
+# `on-<github.event_name>-<github.ref_type>-<github.ref_name>` format.
+# For example, if the event is a push to a tag `v1.0.0`, the matcher
+# `on-push-tag-v*` will match.
+#
+# The value of the matching variable will be written to $GITHUB_OUTPUT to set
+# the jobs, python versions, and operating systems to run the workflow on. The
+# first match found is used.
+#
+# Example configuration:
+  # on-push-tag-*: |  # Push version tag matching "v*", eg. "v1.0.0"
+  #   jobs=["test", "build", "publish", "release"]
+  #   python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
+  #   os=["ubuntu-latest"]
+  # on-push-branch-main: |  # Push commits to main branch
+  #   jobs=["test", "build", "publish-test"]
+  #   python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
+  #   os=["ubuntu-latest"]
+  # on-push-branch-*: |  # Push commits to other branches
+  #   jobs=["test", "build", "publish-test"]
+  #   python-version=["3.9", "3.13"]
+  #   os=["ubuntu-latest"]
 
 inputs:
   config:
