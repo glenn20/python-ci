@@ -64,6 +64,8 @@ runs:
           if [[ "$tag" == $key ]]; then
             # Write value of the matching environment variable to $GITHUB_OUTPUT
             echo '${{ inputs.config }}' | jq -r ".[\"$key\"]" >> $GITHUB_OUTPUT
+            echo "Matched configuration for key='$key':"
+            cat $GITHUB_OUTPUT
             exit 0  # Stop after the first match
           fi
         done
