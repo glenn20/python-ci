@@ -1,0 +1,42 @@
+name: Setup CI workflow configuraqtion
+description: |-
+  A github action to process the configuration for the CI workflow.
+  Outputs:
+  - `jobs`: The list of CI jobs to run (test, build, publish, release).
+  - `os`: The list of operating systems on which to run the tests.
+  - `python-version`: The list of python versions on which to run the tests.
+  Invoke with `uses: glenn20/python-ci/config@v2`
+author: glenn20
+
+inputs:
+  config:
+    description: 'Configuration for the CI workflow.'
+    required: true
+
+outputs:
+  jobs:
+    description: 'The list of CI jobs to run (test, build, publish, release).'
+    value: ${{ steps.config.outputs.jobs }}
+  os:
+    description: 'The list of operating systems on which to run the tests.'
+    value: ${{ steps.config.outputs.os }}
+  python-version:
+    description: 'The list of python versions on which to run the tests.'
+    value: ${{ steps.config.outputs.python-version }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Select the workflow configuration
+      id: config
+      run: |  # Find the matching environment variable based on the event trigger
+        tag="on-${{ github.event_name }}-${{ github.ref_type }}-${{ github.ref_name }}"
+        for key in $(echo '${{ inputs.config }}' | jq -r 'keys_unsorted[]'); do
+          if [[ "$tag" == $key ]]; then
+            # Write value of the matching environment variable to $GITHUB_OUTPUT
+            echo '${{ inputs.config }}' | jq -r ".[\"$key\"]" >> $GITHUB_OUTPUT
+            exit 0  # Stop after the first match
+          fi
+        done
+        echo "No matching environment variable found for '$tag'."
+      shell: bash
