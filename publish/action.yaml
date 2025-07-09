@@ -1,22 +1,17 @@
 name: Publish python package
 description: |-
-  A github action to publish a python package to pypi.org or test.pypi.org.
+  A github action to publish a python package to test.pypi.org and pypi.org.
   Input options:
-  - `pypi: test.pypi` or `pypi: upload.pypi`: Publish to test.pypi or pypi.org.
-  Invoke with `uses: glenn20/python-ci/publish@v1`
+  - `test-only`: Publish only to test.pypi.org if set to `true` (default).
+  Invoke with `uses: glenn20/python-ci/publish@v2`
 author: glenn20
+
 inputs:
-  pypi:
-    description: 'Set to "upload.pypi" or "test.pypi" (default).'
-    default: 'test.pypi'
+  test-only:
+    description: 'Publish only to test.pypi if `true` (default).'
+    default: 'true'
     required: false
-    type: string
-# secrets:
-#   pypi_token:
-#     description: 'PyPI API token'
-#     default: ''
-#     required: false
-#     type: string
+
 outputs:
   package-name:
     description: 'Name of the package'
@@ -48,17 +43,17 @@ runs:
         >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: Publish python package
+    - name: Publish python package to test.pypi
       run: uv publish
       env:
-        UV_PUBLISH_URL: https://${{ inputs.pypi }}.org/legacy/
+        UV_PUBLISH_URL: https://test.pypi.org/legacy/
         # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
       shell: bash
 
-    # - name: Publish python package
-    #   uses: pypa/gh-action-pypi-publish@release/v1
-    #   with:
-    #     repository-url: https://${{ inputs.pypi }}.org/legacy/
-    #     # password: ${{ secrets.pypi_token }}
-    #     verbose: true
-
+    - name: Publish python package to pypi.org
+      if: ${{ inputs.test-only != 'true' }}
+      run: uv publish
+      env:
+        UV_PUBLISH_URL: https://pypi.org/legacy/
+        # UV_PUBLISH_TOKEN: ${{ secrets.pypi_token }}
+      shell: bash
