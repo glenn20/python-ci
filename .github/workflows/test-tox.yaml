@@ -50,8 +50,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      # Separate the setup of the tox environment and the running of the tests
+      # to make it easier to separate issues with the tox environment setup and
+      # running the tests.
       - name: Setup tests  # Setup the tox environment for the tests
-        run: uv run --frozen tox run -vv --notest --skip-missing-interpreters false
+        run: uv run --frozen tox run --notest --skip-missing-interpreters false
 
       - name: Run tests  # Use `tox` to run the tests
         run: uv run --frozen tox run --skip-pkg-install

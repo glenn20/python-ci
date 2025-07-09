@@ -1,17 +1,11 @@
 name: CI workflow for python projects
 
 # Run the CI test workflow of jobs which includes:
-# - `check`: Run static code checks (using `mypy`, `ruff`, etc.).
-# - `test`: Run tests (and code checks) using `tox`.
+# - `test`: Run tests (including code checks) using `tox`.
 # - `build`: Build the python package.
 # - `publish-test`: Publish the package to test.pypi.org.
-# - `publish`: Publish the package to pypi.org (runs `publish-test`).
+# - `publish`: Publish the package to pypi.org (also runs `publish-test`).
 # - `release`: Create a GitHub release.
-
-on:
-  push:
-    branches: ["**"]  # Push commits to any branch
-    tags: ["v[0-9]*"]  # Publish on tags matching "v*", eg. "v1.0.0"
 
 # Configure the workflows here. Each environment variable name should be a
 # wildcard matching the
@@ -24,15 +18,28 @@ env:
   on-push-tag-*: |  # Push version tag matching "v*", eg. "v1.0.0"
     jobs=["test", "build", "publish", "release"]
     python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
-    os=["ubuntu-latest"]
+    os=["ubuntu-latest", "windows-latest", "macos-latest"]
   on-push-branch-main: |  # Push commits to main branch
     jobs=["test", "build", "publish-test"]
     python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
-    os=["ubuntu-latest"]
-  on-push-branch-*: |  # Push commits to other branches
-    jobs=["test", "build", "publish-test"]
+    os=["ubuntu-latest", "windows-latest", "macos-latest"]
+  on-push-branch-*: |  # Push commits to other branches (including dev)
+    jobs=["test", "build"]
     python-version=["3.9", "3.13"]
     os=["ubuntu-latest"]
+  on-workflow_dispatch-branch-*: |  # Manual trigger of the workflow
+    jobs=["test", "build"]
+    python-version=["3.9", "3.13"]
+    os=["ubuntu-latest"]
+
+on:
+  push:
+    branches: ["**"]  # Push commits to any branch
+    tags: ["v[0-9]*"]  # Publish on tags matching "v*", eg. "v1.0.0"
+
+####### Edit above this line - leave the rest of the workflow intact.
+
+  workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
   config:  # Select the workflow config based on the event trigger.
@@ -62,13 +69,14 @@ jobs:
   publish:
     name: Publish to pypi.org
     needs: [config, ci-workflow]
-    runs-on: ubuntu-latest
+    # Will match "publish-test" or "publish" in the `jobs` json string.
     if: ${{ contains(needs.config.outputs.jobs, 'publish') }}
     environment:
       name: publish-pypi
       url: ${{ steps.publish.outputs.url }}
     permissions:
       id-token: write  # Required for trusted publishing
+    runs-on: ubuntu-latest
     steps:
       - id: publish
         uses: glenn20/python-ci/actions/publish@v2

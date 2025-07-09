@@ -5,7 +5,7 @@ readme = "README.md"
 authors = [{name = "MY_NAME", email = "MY_EMAIL"}]
 urls = {Homepage = "https://github.com/MY_NAME/MY_PROJECT_NAME"}
 license = {text = "MIT"}
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "rich>=10.12.0",  # For pretty printing: rich.print()
 ]
@@ -54,15 +54,6 @@ version.raw-options.git_describe_command = [
     "--match", "v*.[0-9][0-9][0-9]",
 ]
 
-# For Github Actions workflow - see https://github.com/tox-dev/tox-gh
-[tool.tox.gh.python]
-# Perform static code checks only for the latest python version
-"3.13" = ["clean", "typing", "lint", "format", "3.13"]
-"3.12" = ["3.12"]
-"3.11" = ["3.11"]
-"3.10" = ["3.10"]
-"3.9"  = ["3.9"]
-
 # https://tox.wiki/en/latest/config.html#pyproject-toml-native
 [tool.tox]
 env_list = [
@@ -76,6 +67,15 @@ env.lint.commands = [["ruff", "check"]]
 env.format.commands = [["ruff", "format", "--check"]]
 env_run_base.commands = [["pytest", {replace = "posargs", extend = true}]]
 env_run_base.dependency_groups = ["test"]
+
+# For Github Actions workflow - see https://github.com/tox-dev/tox-gh
+[tool.tox.gh.python]
+# Perform static code checks only for the latest python version
+"3.13" = ["clean", "typing", "lint", "format", "3.13"]
+"3.12" = ["3.12"]
+"3.11" = ["3.11"]
+"3.10" = ["3.10"]
+"3.9"  = ["3.9"]
 
 [tool.mypy]
 files = ["src", "tests"]

@@ -2,22 +2,45 @@
 
 My collection of github [reusable workflows and composite actions](
   https://docs.github.com/en/actions/sharing-automations/avoiding-duplication#about-reusable-workflows-and-composite-actions)
-for checking, testing, publishing and releasing
-python packages. I have put these in this repo so I can re-use them in my python projects.
+for checking, testing, publishing and releasing python packages. I have put
+these in this repo so I can re-use them in my python projects.
 
 These workflows use the [`uv`](https://docs.astral.sh/uv/) python package tool
 for managing the project virtual environments, running tests and building and
-publishing python packages. All tests and publishing workflows run substantially
-more quickly with `uv`.
+publishing python packages.
 
 ## Usage Examples
 
-To get started, copy [`examples/ci.yaml`](./examples/ci.yaml) to the
-`.github/workflows/` directory of your project repo and adjust according to the
-project needs. Configure the CI workflow by editting the `env` variables which
-select the workflow depending on what event triggered the workflow.
+- [`examples/ci.yaml`](./examples/ci.yaml):
 
-## Example pyproject file
+  To get started, copy `examples/ci.yaml` to the `.github/workflows/` directory
+  of your project repo and adjust according to the project needs. Configure the
+  CI workflow by editting the `env` variables which select the workflow
+  depending on what event triggered the workflow:
+
+  ```yaml
+  env:
+    on-push-tag-*: |  # Push version tag matching "v*", eg. "v1.0.0"
+      jobs=["test", "build", "publish", "release"]
+      python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
+      os=["ubuntu-latest", "windows-latest", "macos-latest"]
+    on-push-branch-main: |  # Push commits to main branch
+      jobs=["test", "build", "publish-test"]
+      python-version=["3.9", "3.10", "3.11", "3.12", "3.13"]
+      os=["ubuntu-latest", "windows-latest", "macos-latest"]
+    on-push-branch-*: |  # Push commits to other branches (including dev)
+      jobs=["test", "build"]
+      python-version=["3.9", "3.13"]
+      os=["ubuntu-latest"]
+    on-workflow_dispatch-branch-*: |  # Manual trigger of the workflow
+      jobs=["test", "build"]
+      python-version=["3.9", "3.13"]
+      os=["ubuntu-latest"]
+  ```
+
+  This workflow uses `tox` and `tox-gh` to run and orchestrate the github CI
+  workflow. In this way, the same CI workflows are run on github and locally with
+  `uv run tox`.
 
 - [`examples/pyproject.yaml`](./examples/pyproject.toml):
 
