@@ -12,58 +12,10 @@ more quickly with `uv`.
 
 ## Usage Examples
 
-To get started, copy these three files to the `.github/workflows/` directory of
-the project repo and adjust according to the project needs.
-
-- [`examples/ci-tests.yaml`](./examples/ci-tests.yaml):
-
-  When a commit is pushed to the `main` or `dev` branches, call the
-  `check-test-build` workflow (see below) to:
-  - Run code checks with `mypy` and `ruff`;
-  - Run an abbreviated CI pytest workflow using `pytest`;
-  - Build a python package and upload to github as a workflow artifact; and
-  - Publish to <https://test.pypi.org> (if pushing to the `main` branch).
-
-  Can also be run from a manual `workflow_dispatch` event (eg. from the github
-  "Actions" tab).
-
-- [`examples/ci-release.yaml`](./examples/ci-release.yaml):
-
-  When a git `tag` is pushed (eg. `git tag -a -m v0.3.5 v0.3.5; git push
-  --tags`):
-
-  - Run code checks and comprehensive CI test suite;
-  - Build and publish to <https://test.pypi.org> and <https://pypi.org>; and
-  - Create a github release and upload the signed python package files.
-
-  Can also be run from a manual `workflow_dispatch` event, which will produce a
-  release with a version tag like "v0.3.5.devN".
-
-- [`examples/publish.yaml`](./examples/publish.yaml):
-
-  A callable (reusable) workflow to publish a python package to
-  <https://pypi.org> or <https://test.pypi.org>. For trusted publishing, this
-  workflow can not be called from this repo, but must be copied to your
-  repository and called from your own top-level workflow files (eg.
-  [`examples/ci-tests.yaml`](./examples/ci-tests.yaml)).
-
-  Input options:
-
-  - `pypi: test.pypi`: Publish to test.pypi.org (default).
-  - `pypi: upload.pypi`: Publish to pypi.org.
-
-  Requirements (to support [pypi trusted
-  publishing](https://docs.pypi.org/trusted-publishers/)):
-
-  1. Copy this workflow file to `.github/workflows/publish.yaml` in your
-     repository.
-  2. Create the `publish-test.pypi` and `publish-upload.pypi` Environments in
-     your github repository (Settings->Environments->New Environment).
-  3. Add this workflow file as a "trusted publisher" on your pypi and test.pypi
-     project pages
-     - add the name of the relevant Environment for additional access control.
-  4. Call this workflow from a parent workflow with the `pypi` input set to
-     "upload.pypi" or "test.pypi" (default).
+To get started, copy [`examples/ci.yaml`](./examples/ci.yaml) to the
+`.github/workflows/` directory of your project repo and adjust according to the
+project needs. Configure the CI workflow by editting the `env` variables which
+select the workflow depending on what event triggered the workflow.
 
 ## Example pyproject file
 
@@ -85,17 +37,38 @@ the project repo and adjust according to the project needs.
 
 ## Reusable Github Workflows provided
 
-- [`.github/workflows/check.yaml`](.github/workflows/check.yaml):
+- [`.github/workflows/test-tox.yaml`](.github/workflows/test-tox.yaml):
+
+  Run CI test workflows on the project. Uses `tox` to run the ci tests; and
+  `uv` to manage the python versions and virtual env. Assumes `tox`
+  configuration is completely provided in configuration files and the CI
+  workflow is configured in the `tox-gh` config (eg. `pyproject.toml`).
+  (See <https://github.com/tox-dev/tox-gh>).
+
+  Input options:
+  - `os`: a json string containing the list of operating systems on which to
+    run tests.
+    - Default is `'["ubuntu-latest", "windows-latest", "macos-latest"]'`.
+  - `python-version`: a json string containing the list of python versions on
+    which to run tests.
+    - Default is `'["3.9", "3.10", "3.11", "3.12", "3.13"]'`.
+
+  Invoke with: `uses: glenn20/python-ci/.github/workflows/test-tox.yaml@v2`
+
+- [`.github/workflows/code-check.yaml`](.github/workflows/code-check.yaml):
 
   Run code checks on the codebase. Uses `mypy` for type checking and `ruff` for
   linting and format checking. Assumes `mypy` and `ruff` configuration is
   completely provided in configuration files (eg. `pyproject.toml`).
 
-  Invoke with: `uses: glenn20/python-ci/.github/workflows/check.yaml@v1`
+  This workflow is unnecessary if using `test-tox.yaml` and the static code
+  checks are configured via `tox-gh`.
 
-- [`.github/workflows/test.yaml`](.github/workflows/test.yaml):
+  Invoke with: `uses: glenn20/python-ci/.github/workflows/code-check.yaml@v2`
 
-  Run CI test workflows on the project. Uses `pytest` to run the c tests; and
+- [`.github/workflows/test-pytest.yaml`](.github/workflows/test-pytest.yaml):
+
+  Run CI test workflows on the project. Uses `pytest` to run the ci tests; and
   `uv` to manage the python versions and virtual env. Assumes `pytest`
   configuration is completely provided in configuration files (eg.
   `pyproject.toml`).
@@ -108,7 +81,7 @@ the project repo and adjust according to the project needs.
     which to run tests.
     - Default is `'["3.9", "3.10", "3.11", "3.12", "3.13"]'`.
 
-  Invoke with: `uses: glenn20/python-ci/.github/workflows/test.yaml@v1`
+  Invoke with: `uses: glenn20/python-ci/.github/workflows/test-pytest.yaml@v2`
 
 - [`.github/workflows/build.yaml`](.github/workflows/build.yaml):
 
@@ -117,21 +90,7 @@ the project repo and adjust according to the project needs.
 
   Invoke with `uses: glenn20/python-ci/.github/workflow/build.yaml@v1`
 
-- [`.github/workflows/check-test-build.yaml`](.github/workflows/check-test-build.yaml):
-
-  Combine the `check`, `test` and `build` workflows into a single workflow.
-
-  Input options: (passed to `test.yaml` workflow above)
-  - `os`: a json string containing the list of operating systems on which to
-    run tests.
-    - Default is `'["ubuntu-latest", "windows-latest", "macos-latest"]'`.
-  - `python-version`: a json string containing the list of python versions on
-    which to run tests.
-    - Default is `'["3.9", "3.10", "3.11", "3.12", "3.13"]'`.
-
-  Invoke with: `uses: glenn20/python-ci/.github/workflows/check-build-test.yaml@v1`
-
-- [`.github/workflows/release.yaml`](.github/workflows/release.yaml):
+- [`.github/workflows/github-release.yaml`](.github/workflows/github-release.yaml):
 
   Use [sigstore](https://github.com/sigstore/gh-action-sigstore-python) to sign
   the python package files and upload to a GitHub Release. Assumes the python
@@ -145,11 +104,11 @@ the project repo and adjust according to the project needs.
     workflow is triggered by a tag push, else the version number from the python
     package wheel file.
 
-  Invoke with `uses: glenn20/python-ci/.github/workflow/release.yaml@v1`
+  Invoke with `uses: glenn20/python-ci/.github/workflow/github-release.yaml@v2`
 
 ## Github Actions provided
 
-- [`publish/action.yaml`](publish/action.yaml):
+- [`actions/publish/action.yaml`](actions/publish/action.yaml):
 
   A github action to publish a python package to <https://pypi.org> or
   <https://pypi.org>. The publish workflow can't support [pypi trusted
@@ -159,16 +118,15 @@ the project repo and adjust according to the project needs.
     https://docs.github.com/en/actions/sharing-automations/avoiding-duplication#about-reusable-workflows-and-composite-actions).
 
   Input options:
-  - `pypi: test.pypi` - publish to <https://test.pypi.org> (default)
-  - `pypi: upload.pypi` - publish to <https://pypi.org>.
+  - `test-only` - Only publish to <https://test.pypi.org> if set 'true' (default)
 
   Outputs:
   - `package-name`: the name of the package file published
   - `package-version`: the version number of the package, eg. "1.3.2"
 
-  Invoke with: `uses: glenn20/python-ci/publish@v1`
+  Invoke with: `uses: glenn20/python-ci/actions/publish@v2`
 
-- [`setup/action.yaml`](setup/action.yaml):
+- [`actions/setup/action.yaml`](actions/setup/action.yaml):
 
   Install `uv` and python and setup the python virtual environment (venv).
 
@@ -178,4 +136,4 @@ the project repo and adjust according to the project needs.
   - `python-version:` set the python version to install (default
     "3.12").
 
-  Invoke with: `uses: glenn20/python-ci/setup@v1`
+  Invoke with: `uses: glenn20/python-ci/actions/setup@v2`
