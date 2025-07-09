@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: config
-        uses: glenn20/python-ci/config@v2
+        uses: glenn20/python-ci/actions/config@v2
         with:
           config: ${{ toJson(env) }}
 
@@ -71,7 +71,7 @@ jobs:
       id-token: write  # Required for trusted publishing
     steps:
       - id: publish
-        uses: glenn20/python-ci/publish@v2
+        uses: glenn20/python-ci/actions/publish@v2
         with:
           test-only: ${{ contains(fromJson(needs.config.outputs.jobs), 'publish') && 'false' || 'true' }}
 
