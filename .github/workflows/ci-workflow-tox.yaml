@@ -59,12 +59,12 @@ on:
 jobs:
   build:  # Always build the package in this workflow
     name: Build python package
-    uses: ./.github/workflows/build.yaml
+    uses: glenn20/python-ci/.github/workflows/build.yaml@v2
 
   test:
     name: Tests
     if: ${{ contains(fromJson(inputs.jobs), 'test') }}
-    uses: ./.github/workflows/test-tox.yaml
+    uses: glenn20/python-ci/.github/workflows/test-tox.yaml@v2
     with:
       os: ${{ inputs.os }}
       python-version: ${{ inputs.python-version }}
